@@ -1,0 +1,40 @@
+{
+  "name": "QD",
+  "package": "community.lazycat.app.qd",
+  "description": "一个 HTTP 定时任务自动执行 Web 框架",
+  "homepage": "https://github.com/qd-today/qd",
+  "author": "qd-today",
+  "app_features": [
+    "background_task",
+    "public_path"
+  ],
+  "subdomain": "qd",
+  "version": "2025.01.29",
+  "public_paths": [
+    "/"
+  ],
+  "iconPath": "icon.png",
+  "composePath": "docker-compose.yaml",
+  "unsupported_platforms": [],
+  "lastRouteType": "from_compose",
+  "port_mappings": {
+    "qd_8923_80": {
+      "use": true,
+      "type": "http",
+      "path": "/",
+      "targetPath": "/"
+    }
+  },
+  "image_qdtoday_qd_latest": {
+    "originalImage": "qdtoday/qd:latest",
+    "pushTarget": "none"
+  },
+  "qd_volume_/usr/src/app/config_action": "emptyDir",
+  "qd_volume_/usr/src/app/config_location": "app_data",
+  "image_redis_alpine": {
+    "originalImage": "redis:alpine",
+    "pushTarget": "none"
+  },
+  "redis_volume_/data_action": "emptyDir",
+  "redis_volume_/data_location": "app_data"
+}

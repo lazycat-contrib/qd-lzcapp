@@ -1,0 +1,36 @@
+lzc-sdk-version: "0.1"
+name: QD
+package: community.lazycat.app.qd
+version: 2025.01.29
+description: 一个 HTTP 定时任务自动执行 Web 框架
+homepage: https://github.com/qd-today/qd
+author: qd-today
+application:
+  subdomain: qd
+  background_task: true
+  multi_instance: false
+  gpu_accel: false
+  kvm_accel: false
+  usb_accel: false
+  public_path:
+    - /
+  routes:
+    - /=http://qd:80/
+services:
+  qd:
+    image: docker.hlmirror.com/qdtoday/qd:latest
+    environment:
+      - DOMAIN=
+      - COOKIE_SECRET=binux
+      - PBKDF2_ITERATIONS=400
+      - AES_KEY=binux
+      - REDISCLOUD_URL=redis://redis:6379
+    depends_on:
+      - redis
+    binds:
+      - /lzcapp/var/config:/usr/src/app/config
+  redis:
+    image: docker.hlmirror.com/redis:alpine
+    command: --loglevel warning
+    binds:
+      - /lzcapp/var/data:/data
