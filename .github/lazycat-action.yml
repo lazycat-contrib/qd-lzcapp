@@ -1,0 +1,55 @@
+version: 1
+
+project:
+  root: .
+  build_config: lzc-build.yml
+  package_file: package.yml
+  output: .lazycat-build/qd.lpk
+  target_arch: amd64
+
+update:
+  strategy: publish
+  allow_downgrade: false
+  version_source:
+    type: image
+    image: qd
+
+build:
+  run_buildscript: false
+
+images:
+  # 主应用：上游 qdtoday/qd 发布 8 位日期 tag（YYYYMMDD，immutable，如 20250129/20250803），
+  # 用 custom + 多命名组模板映射为 SemVer（20250129 -> 2025.1.29）；排除 latest/dev/ja3-/lite- 家族
+  - id: qd
+    target: service
+    service: qd
+    source: qdtoday/qd
+    channel: custom
+    sort: semver
+    tag_regex: '^20\d{6}$'
+    version_regex: '^(?P<version>20\d{4})(?P<minor>\d{2})(?P<patch>\d{2})$'
+    version_template: '{version}.{minor}.{patch}'
+    delivery:
+      mode: mirror
+  # 辅助 redis：跟随上游 alpine 家族，固定 7.x-alpine（immutable），tag 带后缀 -> custom + 版本映射
+  - id: redis
+    target: service
+    service: redis
+    source: library/redis
+    channel: custom
+    sort: semver
+    tag_regex: '^7\.\d+-alpine$'
+    version_regex: '^(?P<version>7\.\d+)-alpine$'
+    version_template: '{version}.0'
+    delivery:
+      mode: mirror
+
+stores:
+  official:
+    # Official store publication is intentionally disabled; publish only to Miaomiao Store.
+    enabled: false
+  private:
+    enabled: true
+    skip_if_version_exists: true
+    name: QD
+    summary: "一个 HTTP 定时任务自动执行 Web 框架"

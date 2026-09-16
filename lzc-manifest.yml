@@ -1,0 +1,29 @@
+application:
+  subdomain: qd
+  background_task: true
+  public_path:
+    - /
+  upstreams:
+    - location: /
+      backend: http://qd:80/
+
+services:
+  qd:
+    # upstream: qdtoday/qd:20250129
+    image: docker.1ms.run/qdtoday/qd:20250129
+    environment:
+      - DOMAIN=
+      - COOKIE_SECRET={{ stable_secret "cookie_secret" }}
+      - PBKDF2_ITERATIONS=400
+      - AES_KEY={{ stable_secret "aes_key" }}
+      - REDISCLOUD_URL=redis://redis:6379
+    depends_on:
+      - redis
+    binds:
+      - /lzcapp/var/config:/usr/src/app/config
+  redis:
+    # upstream: library/redis:7.4-alpine
+    image: docker.1ms.run/library/redis:7.4-alpine
+    command: --loglevel warning
+    binds:
+      - /lzcapp/var/data:/data
