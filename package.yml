@@ -1,5 +1,5 @@
 package: community.lazycat.app.qd
-version: 2025.1.29
+version: 2025.8.3
 name: QD
 description: "一个 HTTP 定时任务自动执行 Web 框架"
 min_os_version: "1.5.0"

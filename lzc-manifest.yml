@@ -6,11 +6,10 @@ application:
   upstreams:
     - location: /
       backend: http://qd:80/
-
 services:
   qd:
-    # upstream: qdtoday/qd:20250129
-    image: docker.1ms.run/qdtoday/qd:20250129
+    # upstream: qdtoday/qd:20250803
+    image: docker.1ms.run/qdtoday/qd:20250803
     environment:
       - DOMAIN=
       - COOKIE_SECRET={{ stable_secret "cookie_secret" }}
