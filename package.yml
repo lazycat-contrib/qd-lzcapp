@@ -1,4 +1,5 @@
 package: community.lazycat.app.qd
+license: MIT
 version: 2025.8.3
 name: QD
 description: "一个 HTTP 定时任务自动执行 Web 框架"
